@@ -23,3 +23,4 @@ ssg build [flags]
         ssg build --base-url https://example.com --validate-assets
         ssg build --watch
         ssg build --force
+

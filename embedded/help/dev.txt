@@ -16,4 +16,3 @@ ssg dev [flags]
         ssg dev
         ssg dev --in ./my-site --port 8080
 
-

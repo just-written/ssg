@@ -11,3 +11,4 @@ ssg host [flags]
     Examples:
         ssg host
         ssg host --dir ./public --port 8080
+

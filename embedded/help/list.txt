@@ -9,3 +9,4 @@ ssg list [flags]
     Examples:
         ssg list
         ssg list --dir ./my-site
+
