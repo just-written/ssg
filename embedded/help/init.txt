@@ -1,0 +1,17 @@
+ssg init [flags]
+
+    Creates a new project from a starter template.
+
+    <name>/
+    ├── assets/
+    ├── partials/
+    └── pages/
+
+    Flags:
+        --dir      Directory name to create  (def. ssg-project)
+        --templ    Starter template to use   (def. default)
+
+    Examples:
+        ssg init
+        ssg init --dir my-site
+        ssg init --dir my-site --templ default

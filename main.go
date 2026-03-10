@@ -8,8 +8,19 @@ import (
 	"os"
 )
 
-//go:embed embedded/help.txt
+// refactor this if it gets annoying i guess
+//go:embed embedded/help/help.txt
 var helpText string
+//go:embed embedded/help/init.txt
+var helpInitText string
+//go:embed embedded/help/build.txt
+var helpBuildText string
+//go:embed embedded/help/host.txt
+var helpHostText string
+//go:embed embedded/help/dev.txt
+var helpDevText string
+//go:embed embedded/help/list.txt
+var helpListText string
 
 func main() {
 	if len(os.Args) < 2 {
@@ -25,7 +36,13 @@ func main() {
 		cmd := flag.NewFlagSet("init", flag.ExitOnError)
 		outDir := cmd.String("dir", "ssg-project", "New projects directory. (def. ssg-project)")
 		templ := cmd.String("templ", "default", "Template to use. (def. bare)")
+		help := cmd.Bool("help", false, "Show build help")
 		cmd.Parse(os.Args[2:])
+
+		if *help {
+			fmt.Print(helpInitText)
+			return
+		}
 
 		if err := ssgInit(*outDir, *templ); err != nil {
 			fmt.Fprintf(os.Stderr, "command 'init' error: %v\n", err)
@@ -42,6 +59,7 @@ func main() {
 		quiet := cmd.Bool("quiet", false, "Suppress build messages.")
 		watch := cmd.Bool("watch", false, "Watch for changes and rebuild.")
 		force := cmd.Bool("force", false, "Force complete rebuild, ignores dependency graph.")
+		help := cmd.Bool("help", false, "Show build help")
 		cmd.Parse(os.Args[2:])
 
 		flags := BuildFlags{
@@ -53,6 +71,11 @@ func main() {
 			Verbose:        *verbose,
 			Quiet:          *quiet,
 			Force: 			*force,
+		}
+
+		if *help {
+			fmt.Print(helpBuildText)
+			return
 		}
 
 		if *watch {
@@ -68,7 +91,13 @@ func main() {
 		cmd := flag.NewFlagSet("host", flag.ExitOnError)
 		dir := cmd.String("dir", "dist", "Directory to host from (def. dist/)")
 		port := cmd.Int("port", 1313, "Port of hosted http server. (def. 1313)")
+		help := cmd.Bool("help", false, "Show host help")
 		cmd.Parse(os.Args[2:])
+
+		if *help {
+			fmt.Print(helpHostText)
+			return
+		}
 
 		if err := ssgHost(*dir, *port); err != nil {
 			fmt.Fprintf(os.Stderr, "command 'host' error: %v\n", err)
@@ -81,7 +110,13 @@ func main() {
 		baseURL := cmd.String("base-url", "", "Base URL for sitemap.")
 		validateAssets := cmd.Bool("validate-assets", false, "Validate assets exist.")
 		force := cmd.Bool("force", false, "Force complete rebuild, ignores dependency graph.")
+		help := cmd.Bool("help", false, "Show dev help")
 		cmd.Parse(os.Args[2:])
+
+		if *help {
+			fmt.Print(helpDevText)
+			return
+		}
 
 		flags := BuildFlags{
 			SrcDir:         *in,
@@ -97,7 +132,13 @@ func main() {
 	case "list":
 		cmd := flag.NewFlagSet("list", flag.ExitOnError)
 		in := cmd.String("dir", ".", "Source directory.")
+		help := cmd.Bool("help", false, "Show list help")
 		cmd.Parse(os.Args[2:])
+
+		if *help {
+			fmt.Print(helpListText)
+			return
+		}
 
 		if err := ssgList(*in); err != nil {
 			fmt.Fprintf(os.Stderr, "command 'list' error: %v\n", err)

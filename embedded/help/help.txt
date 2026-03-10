@@ -1,0 +1,42 @@
+SSG - static site generator
+Build static sites with Golang HTML templating.
+
+USAGE
+    ssg <command> [flags]
+
+COMMANDS
+    init     Create a new project directory
+    build    Build pages and statically copy assets
+    dev      Watch for changes, rebuild, and host
+    host     Serve the build directory
+    list     List all pages and their data keys
+    help     Show this message
+
+    Run ssg <command> --help for more specific usage.
+
+PROJECT LAYOUT
+    assets/          Static files (CSS, JS, images). Referenced in templates
+                     with {{ asset "file.css" }} (resolved to a hashed URL).
+
+    pages/           HTML templates. Files prefixed with _ are excluded from
+                     output (used for layouts and co-located data files).
+
+    pages/_layout.html    Global layout wrapping every page. A local
+                          _layout.html in a subdirectory overrides the global.
+
+    pages/_data.json        Global data available to all templates (optional).
+    pages/<dir>/_data.json  Data available to all pages in a subdirectory.
+    pages/<n>.json          Page-level data, merged over global data (optional).
+
+    partials/        HTML fragments available to every template via
+                     {{ template "name.html" . }}
+
+
+DATA MERGE ORDER
+    JSON data is merged in order, with each layer overriding the one above:
+
+    1. pages/_data.json         global
+    2. pages/<dir>/_data.json   subdirectory (nested directories each apply)
+    3. pages/<dir>/<page>.json  page-level
+
+    No JSON data is required. Pages that receive no data are built as is.

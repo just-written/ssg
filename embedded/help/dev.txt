@@ -1,0 +1,19 @@
+ssg dev [flags]
+
+    Runs an initial build, then watches for changes and rebuilds automatically.
+    Serves the build directory over HTTP. Prints a ready message once the
+    initial build completes.
+
+    Flags:
+        --in               Source directory containing pages/  (def. ".")
+        --out              Build output directory              (def. dist)
+        --port             Port to serve on                    (def. 1313)
+        --base-url         Base URL for sitemap generation     (no def.)
+        --validate-assets  Fail if any template references a missing asset
+        --force            Force a full rebuild, ignoring the dependency graph
+
+    Examples:
+        ssg dev
+        ssg dev --in ./my-site --port 8080
+
+

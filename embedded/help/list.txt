@@ -1,0 +1,11 @@
+ssg list [flags]
+
+    Lists all pages in the project along with their data sources and
+    available template keys. Useful for debugging data inheritance.
+
+    Flags:
+        --dir    Source directory containing pages/  (def. ".")
+
+    Examples:
+        ssg list
+        ssg list --dir ./my-site
