@@ -1,0 +1,136 @@
+SSG - static site generator
+Build static sites with Golang HTML templating.
+
+USAGE
+    ssg <command> [flags]
+
+COMMANDS
+    init     Create a new project directory
+    build    Build pages and statically copy assets
+    dev      Watch for changes, rebuild, and serve
+    host     Serve the build directory
+    list     List all pages and their data keys
+    help     Show this message
+
+
+ssg init [flags]
+
+    Creates a new project from a starter template.
+
+    <name>/
+    ├── assets/
+    ├── partials/
+    └── pages/
+
+    Flags:
+        --dir      Directory name to create  (def. ssg-project)
+        --templ    Starter template to use   (def. default)
+
+    Examples:
+        ssg init
+        ssg init --dir my-site
+        ssg init --dir my-site --templ default
+
+
+ssg build [flags]
+
+    Renders all pages in pages/ and writes output to the build directory.
+    Assets are content-hashed, layouts and partials are applied automatically.
+    Subsequent builds are incremental: only pages whose dependencies have
+    changed are rebuilt.
+
+    Flags:
+        --in               Source directory containing pages/  (def. ".")
+        --out              Build output directory              (def. dist)
+        --base-url         Base URL for sitemap generation     (no def.)
+                           Sitemap is not generated if omitted.
+        --validate-assets  Fail if any template references a missing asset
+        --check-links      Fail if broken internal links are found
+        --verbose          Print data keys available to each page
+        --watch            Watch for changes and rebuild automatically
+        --force            Force a full rebuild, ignoring the dependency graph
+        --quiet            Suppress per-file output
+
+    Examples:
+        ssg build
+        ssg build --in ./my-site --out ./public
+        ssg build --base-url https://example.com --validate-assets
+        ssg build --watch
+        ssg build --force
+
+
+ssg dev [flags]
+
+    Runs an initial build, then watches for changes and rebuilds automatically.
+    Serves the build directory over HTTP. Prints a ready message once the
+    initial build completes.
+
+    Flags:
+        --in               Source directory containing pages/  (def. ".")
+        --out              Build output directory              (def. dist)
+        --port             Port to serve on                    (def. 1313)
+        --base-url         Base URL for sitemap generation     (no def.)
+        --validate-assets  Fail if any template references a missing asset
+        --force            Force a full rebuild, ignoring the dependency graph
+
+    Examples:
+        ssg dev
+        ssg dev --in ./my-site --port 8080
+
+
+ssg host [flags]
+
+    Serves the build directory over HTTP for local preview.
+    Each request is logged with method, path, status, and duration.
+    Not intended for production use.
+
+    Flags:
+        --dir    Directory to serve  (def. dist)
+        --port   Port to listen on   (def. 1313)
+
+    Examples:
+        ssg host
+        ssg host --dir ./public --port 8080
+
+
+ssg list [flags]
+
+    Lists all pages in the project along with their data sources and
+    available template keys. Useful for debugging data inheritance.
+
+    Flags:
+        --dir    Source directory containing pages/  (def. ".")
+
+    Examples:
+        ssg list
+        ssg list --dir ./my-site
+
+
+PROJECT LAYOUT
+
+    assets/          Static files (CSS, JS, images). Referenced in templates
+                     with {{ asset "file.css" }} (resolved to a hashed URL).
+
+    pages/           HTML templates. Files prefixed with _ are excluded from
+                     output (used for layouts and co-located data files).
+
+    pages/_layout.html    Global layout wrapping every page. A local
+                          _layout.html in a subdirectory overrides the global.
+
+    pages/_data.json        Global data available to all templates (optional).
+    pages/<dir>/_data.json  Data available to all pages in a subdirectory.
+    pages/<n>.json          Page-level data, merged over global data (optional).
+
+    partials/        HTML fragments available to every template via
+                     {{ template "name.html" . }}
+
+
+DATA MERGE ORDER
+
+    JSON data is merged in order, with each layer overriding the one above:
+
+    1. pages/_data.json         global
+    2. pages/<dir>/_data.json   subdirectory (nested directories each apply)
+    3. pages/<dir>/<page>.json  page-level
+
+    No JSON file is required. Pages that receive no data are built as is.

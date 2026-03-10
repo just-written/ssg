@@ -1,0 +1,9 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 2rem 1rem;
+  font-family: sans-serif;
+  line-height: 1.6;
+}
