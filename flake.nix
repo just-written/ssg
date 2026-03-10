@@ -8,7 +8,6 @@
         devShells.${system}.default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [ 
                 go gopls vscode-langservers-extracted 
-                wrangler
             ];
         };
     };
