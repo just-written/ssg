@@ -15,8 +15,6 @@ var helpText string
 var helpInitText string
 //go:embed embedded/help/build.txt
 var helpBuildText string
-//go:embed embedded/help/host.txt
-var helpHostText string
 //go:embed embedded/help/dev.txt
 var helpDevText string
 //go:embed embedded/help/list.txt
@@ -87,30 +85,15 @@ func main() {
 				fmt.Fprintf(os.Stderr, "command 'build' error: %v\n", err)
 			}
 		}
-	case "host":
-		cmd := flag.NewFlagSet("host", flag.ExitOnError)
-		dir := cmd.String("dir", "dist", "Directory to host from (def. dist/)")
-		port := cmd.Int("port", 1313, "Port of hosted http server. (def. 1313)")
-		help := cmd.Bool("help", false, "Show host help")
-		cmd.Parse(os.Args[2:])
-
-		if *help {
-			fmt.Print(helpHostText)
-			return
-		}
-
-		if err := ssgHost(*dir, *port); err != nil {
-			fmt.Fprintf(os.Stderr, "command 'host' error: %v\n", err)
-		}
 	case "dev":
 		cmd := flag.NewFlagSet("dev", flag.ExitOnError)
-		in := cmd.String("in", ".", "Source directory.")
-		out := cmd.String("out", "dist", "Build output directory.")
-		port := cmd.Int("port", 1313, "Port to serve on.")
+		out := cmd.String("out", "dist", "Build directory (def. dist/)")
+		in := cmd.String("in", ".", "Source directory (def. .)")
 		baseURL := cmd.String("base-url", "", "Base URL for sitemap.")
-		validateAssets := cmd.Bool("validate-assets", false, "Validate assets exist.")
-		force := cmd.Bool("force", false, "Force complete rebuild, ignores dependency graph.")
-		help := cmd.Bool("help", false, "Show dev help")
+		verbose := cmd.Bool("verbose", false, "Print data keys available to each page.")
+		port := cmd.Int("port", 8788, "Wrangler dev server port.")
+		wranglerBin := cmd.String("wrangler", "wrangler", "Path to the wrangler binary.")
+		help := cmd.Bool("help", false, "Show build help")
 		cmd.Parse(os.Args[2:])
 
 		if *help {
@@ -118,15 +101,21 @@ func main() {
 			return
 		}
 
-		flags := BuildFlags{
-			SrcDir:         *in,
-			BuildDir:       *out,
-			BaseURL:        *baseURL,
-			ValidateAssets: *validateAssets,
-			Force: 			*force,		
+		flags := DevFlags{
+			BuildFlags: BuildFlags{
+				BuildDir: *out,
+				SrcDir:   *in,
+				BaseURL:  *baseURL,
+				Verbose:  *verbose,
+				Quiet:    false,
+			},
+
+			WranglerBin:  *wranglerBin,
+			WranglerPort: *port,
+			WranglerArgs: cmd.Args(),
 		}
 
-		if err := ssgDev(flags, *port); err != nil {
+		if err := ssgDev(flags); err != nil {
 			fmt.Fprintf(os.Stderr, "command 'dev' error: %v\n", err)
 		}
 	case "list":

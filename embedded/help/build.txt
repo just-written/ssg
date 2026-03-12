@@ -1,26 +1,26 @@
 ssg build [flags]
 
-    Renders all pages in pages/ and writes output to the build directory.
-    Assets are content-hashed, layouts and partials are applied automatically.
-    Subsequent builds are incremental: only pages whose dependencies have
-    changed are rebuilt.
+Renders all pages in pages/ and writes output to the build directory.
+Assets are content-hashed, layouts and partials are applied automatically.
+Subsequent builds are incremental: only pages whose dependencies have
+changed are rebuilt.
 
-    Flags:
-        --in               Source directory containing pages/  (def. ".")
-        --out              Build output directory              (def. dist)
-        --base-url         Base URL for sitemap generation     (no def.)
-                           Sitemap is not generated if omitted.
-        --validate-assets  Fail if any template references a missing asset
-        --check-links      Fail if broken internal links are found
-        --verbose          Print data keys available to each page
-        --watch            Watch for changes and rebuild automatically
-        --force            Force a full rebuild, ignoring the dependency graph
-        --quiet            Suppress per-file output
+FLAGS
+    --in               Source directory containing pages/  (def. ".")
+    --out              Build output directory              (def. dist)
+    --base-url         Base URL for sitemap generation     (no def.)
+                       Sitemap is not generated if omitted.
+    --validate-assets  Fail if any template references a missing asset
+    --check-links      Fail if broken internal links are found
+    --verbose          Print data keys available to each page
+    --watch            Watch for changes and rebuild automatically
+    --force            Force a full rebuild, ignoring the dependency graph
+    --quiet            Suppress per-file output
 
-    Examples:
-        ssg build
-        ssg build --in ./my-site --out ./public
-        ssg build --base-url https://example.com --validate-assets
-        ssg build --watch
-        ssg build --force
+EXAMPLES
+    ssg build
+    ssg build --in ./my-site --out ./public
+    ssg build --base-url https://example.com --validate-assets
+    ssg build --watch
+    ssg build --force
 

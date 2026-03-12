@@ -1,18 +1,34 @@
 ssg dev [flags]
 
-    Runs an initial build, then watches for changes and rebuilds automatically.
-    Serves the build directory over HTTP. Prints a ready message once the
-    initial build completes.
+Runs a full build, then watches the source directory for changes and
+rebuilds incrementally as files are modified. At the same time, starts
+a Wrangler Pages dev server pointing at the build directory so you can
+preview the site in a browser.
 
-    Flags:
-        --in               Source directory containing pages/  (def. ".")
-        --out              Build output directory              (def. dist)
-        --port             Port to serve on                    (def. 1313)
-        --base-url         Base URL for sitemap generation     (no def.)
-        --validate-assets  Fail if any template references a missing asset
-        --force            Force a full rebuild, ignoring the dependency graph
+Wrangler is not started until the first build succeeds. If the initial
+build fails, the command exits immediately with an error.
 
-    Examples:
-        ssg dev
-        ssg dev --in ./my-site --port 8080
+Press Ctrl-C to stop both the watcher and the Wrangler server.
+
+FLAGS
+    --in <dir>          Source directory (default: .)
+    --out <dir>         Build output directory (default: dist)
+    --base-url <url>    Base URL used when generating sitemap.xml
+    --port <n>          Port for the Wrangler dev server (default: 8788)
+    --wrangler <path>   Path to the wrangler binary (default: wrangler)
+    --verbose           Print the data keys available to each page on rebuild
+
+EXAMPLES
+    ssg dev
+        (Build the current directory and serve on http://localhost:8788.)
+
+    ssg dev --in ./my-site --out ./dist --port 3000
+        (Build ./my-site, write output to ./dist, serve on port 3000.)
+
+    ssg dev --wrangler ./node_modules/.bin/wrangler
+        (Use a project-local wrangler installation.)
+
+REQUIREMENTS
+    Wrangler executable must be installed and available on your PATH (or specified 
+    with --wrangler).
 
