@@ -1,7 +1,0 @@
-{
-    "siteTitle": "SSG Project",
-    "pages": [
-        {"title": "Home", "url": "/"},
-        {"title": "New Page", "url": "/newpage"}
-    ]
-}

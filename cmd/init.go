@@ -7,11 +7,18 @@ import (
 	"os"
 	"path/filepath"
 	"ssg/embedded"
+	"text/template"
 
 	"github.com/spf13/cobra"
 )
 
 var projectName string
+var baseURL string
+
+var templateFiles = map[string]bool{
+	"ssg.toml": true,
+	"wrangler.toml": true,
+}
 
 var initCmd = &cobra.Command{
 	Use:   "init",
@@ -23,6 +30,7 @@ var initCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(initCmd)
 	initCmd.Flags().StringVarP(&projectName, "name", "n", "ssg-project", "Name of the project directory")
+	initCmd.Flags().StringVarP(&baseURL, "base-url", "u", "https://example.com", "Base URL for the project")
 }
 
 func initFunc(cmd *cobra.Command, args []string) error {
@@ -65,6 +73,10 @@ func initFunc(cmd *cobra.Command, args []string) error {
 			return os.MkdirAll(destPath, 0755)
 		}
 
+		if filepath.Base(destPath) == ".gitkeep" {
+			return nil
+		}
+
 		srcFile, err := fsys.Open(path)
 		if err != nil {
 			return err
@@ -77,7 +89,28 @@ func initFunc(cmd *cobra.Command, args []string) error {
 		}
 		defer destFile.Close()
 
+		if templateFiles[filepath.Base(path)] {
+			return copyWithReplacements(srcFile, destFile, projectName, baseURL)
+		}
+
 		_, err = io.Copy(destFile, srcFile)
 		return err
+	})
+}
+
+func copyWithReplacements(src io.Reader, dst io.Writer, name, url string) error {
+	data, err := io.ReadAll(src)
+	if err != nil {
+		return fmt.Errorf("reading template file: %w", err)
+	}
+
+	tmpl, err := template.New("").Parse(string(data))
+	if err != nil {
+		return fmt.Errorf("parsing template: %w", err)
+	}
+
+	return tmpl.Execute(dst, map[string]string{
+		"ProjectName": name,
+		"BaseURL":     url,
 	})
 }

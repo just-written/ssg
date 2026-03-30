@@ -27,12 +27,12 @@ var serveCmd = &cobra.Command{
 		}
 
 		bcfg := BuildConfig{
-			In:       bv.GetString("in"),
-			Out:      bv.GetString("out"),
-			Pages:    bv.GetString("pages"),
-			Static:   bv.GetString("static"),
+			In: bv.GetString("in"),
+			Out: bv.GetString("out"),
+			Pages: bv.GetString("pages"),
+			Static: bv.GetString("static"),
 			Partials: bv.GetString("partials"),
-			BaseURL:  bv.GetString("base-url"),
+			BaseURL: bv.GetString("base-url"),
 		}
 
 		sv, err := initConfig(cmd, "serve")
