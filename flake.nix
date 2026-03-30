@@ -13,7 +13,7 @@
             pname = "ssg";
             version = "0.0.0";
             src = ./.;
-            vendorHash = "";
+            vendorHash = "sha256-RTAXkeC3K4V1E5qNuj51LKQLImh/IkZeihN3Qls7Y8Q=";
         };
 
         apps.default = {
