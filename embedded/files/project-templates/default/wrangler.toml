@@ -1,0 +1,8 @@
+name = "ssg-project"
+pages_build_output_dir = "./dist"
+
+[env.production]
+name = "ssg-project"
+
+[env.preview]
+name = "ssg-project"
