@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{.siteTitle}} - {{.pageTitle}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Geist+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --text:    #18181a;
+      --muted:   #6b6b72;
+      --border:  #e5e5e8;
+      --bg:      #ffffff;
+      --code-bg: #f5f5f7;
+      --accent:  #18181a;
+      --max-w:   680px;
+      --mono:    'Geist Mono', monospace;
+      --sans:    'Geist', sans-serif;
+      --serif:   'Crimson Pro', Georgia, serif;
+    }
+
+    html { font-size: 17px; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--serif);
+      line-height: 1.75;
+      padding: 72px 24px 120px;
+    }
+
+    /* ── Layout ── */
+    .page {
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    /* ── Headings ── */
+    .page h1, .page h2, .page h3,
+    .page h4, .page h5, .page h6 {
+      font-family: var(--serif);
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--text);
+    }
+
+    .page h1 {
+      font-size: 2.4rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .page h2 {
+      font-size: 1.45rem;
+      margin-top: 56px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page h3 {
+      font-size: 1.15rem;
+      margin-top: 36px;
+      margin-bottom: 10px;
+    }
+
+    .page h4, .page h5, .page h6 {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-top: 28px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Body text ── */
+    .page p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+
+    /* First paragraph after h1 — lead style */
+    .page h1 + p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── Links ── */
+    .page a {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      text-decoration-color: var(--border);
+      transition: text-decoration-color 0.15s;
+    }
+
+    .page a:hover {
+      text-decoration-color: var(--text);
+    }
+
+    /* ── Lists ── */
+    .page ul, .page ol {
+      padding-left: 1.4em;
+      margin-bottom: 20px;
+    }
+
+    .page li {
+      margin-bottom: 6px;
+    }
+
+    .page li > ul, .page li > ol {
+      margin-top: 6px;
+      margin-bottom: 0;
+    }
+
+    /* ── Blockquote ── */
+    .page blockquote {
+      margin: 32px 0;
+      padding: 0 0 0 20px;
+      border-left: 2px solid var(--text);
+      color: var(--muted);
+      font-style: italic;
+      font-size: 1.1rem;
+    }
+
+    .page blockquote p { margin-bottom: 0; color: inherit; }
+
+    /* ── Code ── */
+    .page code {
+      font-family: var(--mono);
+      font-size: 0.82em;
+      background: var(--code-bg);
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+
+    .page pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px 22px;
+      overflow-x: auto;
+      margin: 24px 0;
+    }
+
+    .page pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.83rem;
+      line-height: 1.65;
+      border-radius: 0;
+    }
+
+    /* ── HR ── */
+    .page hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    /* ── Table ── */
+    .page table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 28px 0;
+      font-family: var(--sans);
+      font-size: 0.88rem;
+    }
+
+    .page th {
+      text-align: left;
+      padding: 8px 14px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 500;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .page td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .page tr:last-child td { border-bottom: none; }
+
+    /* ── Images ── */
+    .page img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin: 8px 0;
+    }
+
+    /* ── Strong / em ── */
+    .page strong { font-weight: 600; }
+    .page em { font-style: italic; }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── Footer ── */
+    footer {
+      max-width: var(--max-w);
+      margin: 80px auto 0;
+      padding: 28px 0 0;
+      border-top: 1px solid var(--border);
+    }
+
+    footer .footer-label {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    footer nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 0;
+      flex-direction: column;
+    }
+
+    footer nav a {
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 3px 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      width: fit-content;
+    }
+
+    footer nav a:hover {
+      color: var(--text);
+      border-bottom-color: var(--border);
+    }
+  </style>
+</head>
+<body>
+  <article class="page">
+      {{md "markdown.md"}}
+  </article>
+
+  <footer>
+    <div class="footer-label">Pages</div>
+    <nav>
+      {{range .pages}}
+      <a href="{{.url}}">{{.title}}</a>
+      {{end}}
+    </nav>
+  </footer>
+</body>
+</html>
