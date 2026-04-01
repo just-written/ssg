@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"html/template"
 	"io"
+	"io/fs"
 	"maps"
 	"os"
 	"path/filepath"
@@ -232,22 +233,32 @@ func loadPartials(dir string) ([]partialSource, error) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		return nil, nil
 	}
-	entries, err := os.ReadDir(dir)
-	if err != nil {
-		return nil, fmt.Errorf("reading partials directory: %w", err)
-	}
+
 	var partials []partialSource
-	for _, entry := range entries {
-		if entry.IsDir() || filepath.Ext(entry.Name()) != ".html" {
-			continue
-		}
-		src, err := os.ReadFile(filepath.Join(dir, entry.Name()))
+	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
-			return nil, fmt.Errorf("reading partial %s: %w", entry.Name(), err)
+			return fmt.Errorf("walking partials directory: %w", err)
 		}
-		partials = append(partials, partialSource{name: entry.Name(), src: string(src)})
-		fmt.Printf("partial: %s\n", entry.Name())
+		if d.IsDir() || filepath.Ext(d.Name()) != ".html" {
+			return nil
+		}
+		src, err := os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("reading partial %s: %w", path, err)
+		}
+		// Use path relative to the partials root dir as the name
+		name, err := filepath.Rel(dir, path)
+		if err != nil {
+			return fmt.Errorf("computing relative path for %s: %w", path, err)
+		}
+		partials = append(partials, partialSource{name: name, src: string(src)})
+		fmt.Printf("partial: %s\n", name)
+		return nil
+	})
+	if err != nil {
+		return nil, err
 	}
+
 	return partials, nil
 }
 

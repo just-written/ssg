@@ -10,7 +10,7 @@
     in {
         packages.default = pkgs.buildGoModule {
             pname = "ssg";
-            version = "0.0.1";
+            version = "0.0.2";
             src = ./.;
             vendorHash = "sha256-RTAXkeC3K4V1E5qNuj51LKQLImh/IkZeihN3Qls7Y8Q=";
         };
